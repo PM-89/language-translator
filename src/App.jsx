@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const languages = {
   en: "English",
@@ -14,7 +14,7 @@ const languages = {
   ur: "Urdu",
   fr: "French",
   es: "Spanish",
-  de: "German"
+  de: "German",
 };
 
 const speechLangs = {
@@ -31,7 +31,7 @@ const speechLangs = {
   ur: "ur-PK",
   fr: "fr-FR",
   es: "es-ES",
-  de: "de-DE"
+  de: "de-DE",
 };
 
 export default function App() {
@@ -40,6 +40,26 @@ export default function App() {
   const [source, setSource] = useState("en");
   const [target, setTarget] = useState("hi");
   const [loading, setLoading] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+      setDarkMode(true);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !darkMode;
+
+    setDarkMode(newTheme);
+
+    localStorage.setItem(
+      "theme",
+      newTheme ? "dark" : "light"
+    );
+  };
 
   const translateText = async () => {
     if (!text.trim()) return;
@@ -137,21 +157,46 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <div className="bg-white shadow-xl rounded-2xl p-6 w-full max-w-4xl">
-
+    <div
+      className={`min-h-screen flex items-center justify-center p-4 transition-all duration-300 ${
+        darkMode
+          ? "bg-slate-900"
+          : "bg-slate-100"
+      }`}
+    >
+      <div
+        className={`shadow-xl rounded-2xl p-6 w-full max-w-4xl transition-all duration-300 ${
+          darkMode
+            ? "bg-slate-800 text-white"
+            : "bg-white text-black"
+        }`}
+      >
         <h1 className="text-4xl font-bold text-center mb-6">
           🌐 Language Translator
         </h1>
 
-        <div className="flex flex-wrap gap-4 justify-center mb-6">
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={toggleTheme}
+            className="bg-gray-700 text-white px-4 py-2 rounded-lg"
+          >
+            {darkMode
+              ? "☀ Light Mode"
+              : "🌙 Dark Mode"}
+          </button>
+        </div>
 
+        <div className="flex flex-wrap gap-4 justify-center mb-6">
           <select
             value={source}
             onChange={(e) =>
               setSource(e.target.value)
             }
-            className="border p-3 rounded-lg"
+            className={`border p-3 rounded-lg ${
+              darkMode
+                ? "bg-slate-700 text-white border-slate-600"
+                : "bg-white text-black"
+            }`}
           >
             {Object.entries(languages).map(
               ([code, lang]) => (
@@ -177,7 +222,11 @@ export default function App() {
             onChange={(e) =>
               setTarget(e.target.value)
             }
-            className="border p-3 rounded-lg"
+            className={`border p-3 rounded-lg ${
+              darkMode
+                ? "bg-slate-700 text-white border-slate-600"
+                : "bg-white text-black"
+            }`}
           >
             {Object.entries(languages).map(
               ([code, lang]) => (
@@ -190,11 +239,9 @@ export default function App() {
               )
             )}
           </select>
-
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-
           <div>
             <h2 className="font-semibold mb-2">
               Input Text
@@ -207,11 +254,14 @@ export default function App() {
               onChange={(e) =>
                 setText(e.target.value)
               }
-              className="w-full border p-3 rounded-lg"
+              className={`w-full border p-3 rounded-lg ${
+                darkMode
+                  ? "bg-slate-700 text-white border-slate-600"
+                  : "bg-white text-black"
+              }`}
             />
 
             <div className="flex flex-wrap gap-3 mt-3">
-
               <button
                 onClick={startListening}
                 className="bg-red-500 text-white px-4 py-2 rounded-lg"
@@ -225,7 +275,6 @@ export default function App() {
               >
                 🗑 Clear
               </button>
-
             </div>
           </div>
 
@@ -239,11 +288,14 @@ export default function App() {
               value={translated}
               readOnly
               placeholder="Translated text appears here..."
-              className="w-full border p-3 rounded-lg bg-gray-50"
+              className={`w-full border p-3 rounded-lg ${
+                darkMode
+                  ? "bg-slate-700 text-white border-slate-600"
+                  : "bg-gray-50 text-black"
+              }`}
             />
 
             <div className="flex flex-wrap gap-3 mt-3">
-
               <button
                 onClick={speakTranslation}
                 className="bg-purple-600 text-white px-4 py-2 rounded-lg"
@@ -257,14 +309,11 @@ export default function App() {
               >
                 📋 Copy
               </button>
-
             </div>
           </div>
-
         </div>
 
         <div className="flex justify-center mt-6">
-
           <button
             onClick={translateText}
             disabled={loading}
@@ -274,9 +323,7 @@ export default function App() {
               ? "Translating..."
               : "Translate"}
           </button>
-
         </div>
-
       </div>
     </div>
   );
