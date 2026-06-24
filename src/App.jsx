@@ -3,35 +3,17 @@ import { useState, useEffect } from "react";
 const languages = {
   en: "English",
   hi: "Hindi",
-  kn: "Kannada",
-  ta: "Tamil",
-  te: "Telugu",
-  ml: "Malayalam",
-  mr: "Marathi",
-  gu: "Gujarati",
-  bn: "Bengali",
-  pa: "Punjabi",
-  ur: "Urdu",
   fr: "French",
   es: "Spanish",
-  de: "German",
+  de: "German"
 };
 
 const speechLangs = {
   en: "en-US",
   hi: "hi-IN",
-  kn: "kn-IN",
-  ta: "ta-IN",
-  te: "te-IN",
-  ml: "ml-IN",
-  mr: "mr-IN",
-  gu: "gu-IN",
-  bn: "bn-IN",
-  pa: "pa-IN",
-  ur: "ur-PK",
   fr: "fr-FR",
   es: "es-ES",
-  de: "de-DE",
+  de: "de-DE"
 };
 
 export default function App() {
